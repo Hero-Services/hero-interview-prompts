@@ -3,6 +3,7 @@ import AceEditor from "react-ace";
 import PropTypes from "prop-types";
 import styled, {css} from "styled-components";
 
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
 
@@ -13,7 +14,6 @@ import {voice} from "../style/components/typography";
 
 const Challenge = ({id, title, prompt, estimation, template, language}) => {
   const [showEstimate, setShowEstimate] = useState(false);
-  const [defaultCode, setDefaultCode] = useState(null);
   const [code, setCode] = useState(null);
 
   const rendered = useRef(null);
@@ -26,7 +26,7 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
 
   useEffect(() => {
     const saved = localStorage.getItem("code");
-    setDefaultCode(saved ? saved : template);
+    setCode(saved ? saved : template);
   }, []);
 
   const renderCode = () => {
@@ -60,7 +60,7 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
   };
 
   return (
-    defaultCode && (
+    code && (
       <>
         {estimation && (
           <Estimation type="button" onClick={() => setShowEstimate(!showEstimate)}>
@@ -86,7 +86,7 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
                 enableLiveAutocompletion: true,
                 enableSnippets: true
               }}
-              defaultValue={defaultCode}
+              defaultValue={code}
             />
           </Editor>
           <Output>
