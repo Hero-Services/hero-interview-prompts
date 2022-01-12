@@ -97,14 +97,14 @@ const Home = () => {
             const Output = () => {
               const [password, setPassword] = React.useState("");
               
-              const generate = e => {
+              const handleSubmit = e => {
                 e.preventDefault();
                 // password logic here or define function
                 setPassword("generated");
               };
 
               return (
-                <form onSubmit={generate}>
+                <form onSubmit={handleSubmit}>
                   <label htmlFor="password">Password Generator</label>
                   <div style={{
                     display: "flex",
@@ -122,13 +122,12 @@ const Home = () => {
                         marginRight: "5px"
                       }}
                     />
-                    <button type="submit" onClick={generate}>Generate</button>
+                    <button type="submit">Generate</button>
                   </div>
                 </form>
               )
             };
           `}
-          language="python"
           estimation={30}
         />
       )
