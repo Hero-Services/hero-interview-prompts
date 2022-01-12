@@ -1,45 +1,32 @@
 const Output = () => {
-  const endpoint = "http://localhost:5000/api/v1";
-  const postData = async (url = "", data = {}) => {
-    const response = await fetch(url, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Credentials": "true"
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(data)
-    });
-    return response.json();
-  };
+  const [users, setUsers] = React.useState([]);
 
-  const [values, setValues] = React.useState(null);
-
-  const handleValue = e => {
-    const {name, value} = e.target;
-    setValues({
-      ...values,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    postData(`${endpoint}/signin`, {...values}).then(response => {
-      console.log(response);
-    });
-  };
+  React.useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => response.json())
+      .then(data => setUsers(data));
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="email" name="email" onChange={handleValue} />
-      <input type="password" name="email" onChange={handleValue} />
-      <button type="submit">Submit</button>
-    </form>
+    <div>
+      <ul style={{listStyle: "none", padding: "0"}}>
+        {users.map(user => (
+          <li
+            key={user.id}
+            style={{
+              border: "2px solid #000",
+              borderRadius: "5px",
+              padding: "0 10px",
+              marginBottom: "10px",
+              width: "fit-content",
+              minWidth: "200px"
+            }}>
+            <h3>{user.name}</h3>
+            <p>{user.email}</p>
+            <p>{user.phone}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

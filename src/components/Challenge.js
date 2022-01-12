@@ -20,12 +20,13 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
 
   const handleOutput = code => {
     // store in local storage
-    localStorage.setItem("code", code);
-    setCode(code);
+    if (!code) setCode(template);
+    else setCode(code);
+    localStorage.setItem(`challenge-${id}`, code);
   };
 
   useEffect(() => {
-    const saved = localStorage.getItem("code");
+    const saved = localStorage.getItem(`challenge-${id}`);
     setCode(saved ? saved : template);
   }, []);
 
@@ -61,7 +62,7 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
 
   return (
     code && (
-      <>
+      <Section>
         {estimation && (
           <Estimation type="button" onClick={() => setShowEstimate(!showEstimate)}>
             Estimation: <Estimate showEstimate={showEstimate}>{estimation} min</Estimate>
@@ -91,14 +92,14 @@ const Challenge = ({id, title, prompt, estimation, template, language}) => {
           </Editor>
           <Output>
             <Content>
-              <Button type="button" onClick={renderCode}>
+              <Render type="button" onClick={renderCode}>
                 Render
-              </Button>
-              <iframe ref={rendered} />
+              </Render>
+              <iframe ref={rendered} style={{width: "100%", height: "100%"}} />
             </Content>
           </Output>
         </Wrapper>
-      </>
+      </Section>
     )
   );
 };
@@ -119,7 +120,11 @@ Challenge.defaultProps = {
 };
 
 // Style Overrides
-const Wrapper = styled.section`
+const Section = styled.section`
+  margin: ${pad * 3}px ${pad}px;z
+`;
+
+const Wrapper = styled.div`
   width: 100%;
   margin-top: ${pad * 2}px;
   ${flex("row", "wrap", "center", "space-between")};
@@ -162,10 +167,24 @@ const Output = styled.div`
 `;
 
 const Content = styled.div`
+  position: relative;
   height: 100%;
-  padding: ${pad}px;
+  padding: ${pad * 3}px ${pad}px 0;
   border: ${border} solid ${colors.green};
   border-radius: ${radius};
+`;
+
+const Render = styled(Button)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: ${pad}px;
+  ${voice.quiet};
+
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
 `;
 
 export default Challenge;

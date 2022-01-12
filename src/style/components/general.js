@@ -49,6 +49,11 @@ export const List = styled.ul`
   align-items: center;
 `;
 
+export const NumberedList = styled.ol`
+  list-style: decimal;
+  margin-left: ${pad * 2}px;
+`;
+
 export const ListItem = styled.li`
   text-decoration: none;
   padding: 0 ${pad}px;
